@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\bina_data;
 use App\Http\Controllers\koperasi_profil;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\peserta;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +31,11 @@ Route::get('peserta',[peserta::class,'index'])->name('peserta');
 Route::get('pesertaInput',[peserta::class,'tambahpage'])->name('form');
 Route::post('pesertaInput/tambah',[peserta::class, 'insertPeserta']);
 Route::delete('peserta/{id}',[peserta::class,'destroy'])->name('hapus');
-Route::delete('myproductsDeleteAll',[peserta::class,'deletAll'])->name('hapussemua');
+Route::delete('peserta-delete',[peserta::class,'deletAll'])->name('hapussemua');
+
+
+Route::get('email-send',[MailController::class,'senemail'])->name('kirimemail');
+
 
 /* ==== Route Use Data RestApi ==== */
 Route::get('user',[UserController::class,'index']);

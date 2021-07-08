@@ -4,11 +4,13 @@
    <div class="container">
        
     <a class="btn btn-primary" role="button" href="{{route('form')}}">Peserta</a>
-    <button style="margin-bottom: 10px" class="btn btn-primary delete_all" data-url="{{ route('hapussemua') }}">Hapus</button>
+    <button style="margin-bottom: 10px" class="btn btn-primary delete_all" data-url="{{ route('hapussemua') }}">
+        Hapus
+    </button>
     <table id="example1" class="table table-bordered table-hover"> 
             <thead>
                 <tr>
-                    <th><input type="checkbox"  id="master"></th>
+                    <th><input type="checkbox"  id="master""></th>
                     <th>Nama Lengkap</th>
                     <th>Umur</th>
                     <th>E-Mail</th>
@@ -19,8 +21,8 @@
             </thead>
             <tbody>
                 @foreach ($data as $item)
-                    <tr>
-                        <td><input type="checkbox" class="sub_chk" data-id="{{$item->id}}"></td>
+                    <tr id="row{{$item->id}}">
+                        <td><input type="checkbox" name="ids" class="sub_chk" value="{{$item->id}}""></td>
                         <td><?= $item->nama_lengkap;?></td>
                         <td><?= $item->umur;?></td>
                         <td><?= $item->email;?></td>
@@ -89,6 +91,7 @@
                 })
         });
 
+// select semua
         $('#master').on('click', function(e) {
          if($(this).is(':checked',true))  
          {
@@ -97,5 +100,50 @@
             $(".sub_chk").prop('checked',false);  
          }  
         });
+// menghapus dengan select
+        $('.delete_all').on('click',function(e){
+            e.preventDefault();
+            let allVal=[];
+            $(".sub_chk:checked").each(function(){
+                allVal.push($(this).val())
+            });
+            if(allVal <= 0){
+                Swal.fire('Opps Kamu Belum Pilih Data Yang Mau Di Hapus 😁');
+            }else{
+                Swal.fire({
+                    title: 'Apa Kamu Yakin Mau Menghapus Data?',
+                    text: "Data Yang Akan Di Hapus Tidak Bisa Di Kembalikan 😉",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Hapus !'
+                    }).then((result) => {
+                        
+                        if (result.isConfirmed) {
+                            Swal.fire(
+                                'Terhapus!',
+                                'Yay Data Anda Sudah Di Hapus 🎉.',
+                                'Berhasil'
+                            )
+                            $.ajax({
+                                "url":"{{route('hapussemua')}}",
+                                 "type":"DELETE",
+                                "data":{
+                                    "_token":$('input[name=_token]').val(),
+                                    "ids":allVal
+                                },
+                                "success":function(response){
+                                    $.each(allVal,function(key,val){
+                                        $("#row"+val).remove()
+                                    }) 
+                                }
+
+                            })
+                        }        
+                })
+            }
+        })
+
     </script>
 @endpush

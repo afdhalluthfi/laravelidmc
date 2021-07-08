@@ -107,7 +107,8 @@ class peserta extends Controller
 
     public function deletAll(Request $request){
         $ids =$request->ids;
-        DB::table('peserta')->whereIn('id',explode(',',$ids))->delete();
-        return redirect()->back();
+        ModelsPeserta::whereIn('id',$ids)->delete();
+        return response()->json(['success'=>'berhasil dihapus']);
+        
     }
 }
