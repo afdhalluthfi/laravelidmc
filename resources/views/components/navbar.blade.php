@@ -1,4 +1,5 @@
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+<div>
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -132,3 +133,4 @@
       </li>
     </ul>
   </nav>
+</div>
